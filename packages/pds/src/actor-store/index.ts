@@ -1,6 +1,7 @@
 import path from 'path'
 import assert from 'assert'
 import fs from 'fs/promises'
+import os from 'os'
 import * as crypto from '@atproto/crypto'
 import { Keypair, ExportableKeypair } from '@atproto/crypto'
 import { BlobStore } from '@atproto/repo'
@@ -33,17 +34,26 @@ type ActorStoreResources = {
 
 export class ActorStore {
   reservedKeyDir: string
+  platform: string
 
   constructor(
     public cfg: ActorStoreConfig,
     public resources: ActorStoreResources,
   ) {
     this.reservedKeyDir = path.join(cfg.directory, 'reserved_keys')
+    this.platform = os.platform()
+  }
+
+  private sanitizeDid(did: string) {
+    if (this.platform === 'win32') {
+        return did.replace(/:/g, '_');
+    }
+    return did;
   }
 
   async getLocation(did: string) {
     const didHash = await crypto.sha256Hex(did)
-    const directory = path.join(this.cfg.directory, didHash.slice(0, 2), did)
+    const directory = path.join(this.cfg.directory, didHash.slice(0, 2), this.sanitizeDid(did))
     const dbLocation = path.join(directory, `store.sqlite`)
     const keyLocation = path.join(directory, `key`)
     return { directory, dbLocation, keyLocation }

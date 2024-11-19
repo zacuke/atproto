@@ -2,6 +2,7 @@ import fs from 'fs/promises'
 import fsSync from 'fs'
 import stream from 'stream'
 import path from 'path'
+import os from 'os'
 import { CID } from 'multiformats/cid'
 import { BlobNotFoundError, BlobStore } from '@atproto/repo'
 import { randomStr } from '@atproto/crypto'
@@ -9,12 +10,16 @@ import { httpLogger as log } from './logger'
 import { isErrnoException, fileExists, rmIfExists } from '@atproto/common'
 
 export class DiskBlobStore implements BlobStore {
+  platform: string
+  
   constructor(
     public did: string,
     public location: string,
     public tmpLocation: string,
     public quarantineLocation: string,
-  ) {}
+  ) { 
+    this.platform = os.platform()
+  }
 
   static creator(
     location: string,
@@ -28,16 +33,22 @@ export class DiskBlobStore implements BlobStore {
     }
   }
 
+  private sanitizedDid() {
+    if (this.platform === 'win32') {
+        return this.did.replace(/:/g, '_');
+    }
+    return this.did;
+  }
   private async ensureDir() {
-    await fs.mkdir(path.join(this.location, this.did), { recursive: true })
+    await fs.mkdir(path.join(this.location, this.sanitizedDid()), { recursive: true })
   }
 
   private async ensureTemp() {
-    await fs.mkdir(path.join(this.tmpLocation, this.did), { recursive: true })
+    await fs.mkdir(path.join(this.tmpLocation, this.sanitizedDid()), { recursive: true })
   }
 
   private async ensureQuarantine() {
-    await fs.mkdir(path.join(this.quarantineLocation, this.did), {
+    await fs.mkdir(path.join(this.quarantineLocation, this.sanitizedDid()), {
       recursive: true,
     })
   }
@@ -47,15 +58,15 @@ export class DiskBlobStore implements BlobStore {
   }
 
   getTmpPath(key: string): string {
-    return path.join(this.tmpLocation, this.did, key)
+    return path.join(this.tmpLocation, this.sanitizedDid(), key)
   }
 
   getStoredPath(cid: CID): string {
-    return path.join(this.location, this.did, cid.toString())
+    return path.join(this.location, this.sanitizedDid(), cid.toString())
   }
 
   getQuarantinePath(cid: CID): string {
-    return path.join(this.quarantineLocation, this.did, cid.toString())
+    return path.join(this.quarantineLocation, this.sanitizedDid(), cid.toString())
   }
 
   async hasTemp(key: string): Promise<boolean> {
