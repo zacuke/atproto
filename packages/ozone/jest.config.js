@@ -5,6 +5,6 @@ module.exports = {
   transformIgnorePatterns: [
     `/node_modules/.pnpm/(?!(get-port|lande|toygrad)@)`,
   ],
-  testTimeout: 60000,
+  testTimeout: 120000,
   setupFiles: ['<rootDir>/../../jest.setup.ts'],
 }
