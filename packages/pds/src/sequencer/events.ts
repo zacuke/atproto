@@ -44,6 +44,7 @@ export const formatSeqSyncEvt = async (
   const evt: SyncEvt = {
     did,
     rev: data.rev,
+    // @ts-ignore
     blocks,
   }
   return {

@@ -29,11 +29,11 @@
   },
   "devDependencies": {
     "@swc/jest": "^0.2.24",
-    "jest": "^28.1.2",
+    "jest": "^30.2.0",
     "typescript": "^5.6.3"
   },
   "scripts": {
     "build": "tsc --build tsconfig.build.json",
-    "test": "jest"
+    "test": "cross-env NODE_OPTIONS=\"--trace-warnings\" jest"
   }
 }

@@ -11,3 +11,5 @@ packages/ozone/src/lexicon/** linguist-generated=true
 
 # i18n
 packages/oauth/oauth-provider-ui/src/locales/**/messages.po linguist-generated=true
+
+* text eol=lf

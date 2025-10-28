@@ -2,13 +2,14 @@
 SHELL = /bin/bash
 .SHELLFLAGS = -o pipefail -c
 
+DOCKER_AVAIL := $(strip $(shell docker ps >/dev/null 2>&1 && echo 1 || echo 0))
+WIN_DOCKER := $(and $(findstring Windows_NT,$(OS)),$(DOCKER_AVAIL))
+WIN_PKG := $(strip $(shell node packages/dev-infra/make-scripts/has-win-packages.js))
+MAKEFILE_PATH := $(abspath $(firstword $(MAKEFILE_LIST)))
+
 .PHONY: help
 help: ## Print info about all commands
-	@echo "Helper Commands:"
-	@echo
-	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "    \033[01;32m%-20s\033[0m %s\n", $$1, $$2}'
-	@echo
-	@echo "NOTE: dependencies between commands are not automatic. Eg, you must run 'deps' and 'build' first, and after any changes"
+	@node packages/dev-infra/make-scripts/print-help.js $(abspath $(firstword $(MAKEFILE_PATH)))
 
 .PHONY: build
 build: ## Compile all modules
@@ -16,7 +17,18 @@ build: ## Compile all modules
 
 .PHONY: test
 test: ## Run all tests
-	pnpm test
+ifdef WIN_DOCKER
+ifdef WIN_PKG
+	@echo Rebuilding node_modules to match docker. Run make deps to switch back to win32.
+	@- rmdir /s /q node_modules >nul 2>&1
+	wsl sudo make deps
+	wsl make build
+endif
+endif
+ifdef DOCKER_AVAIL
+	pnpm clean-docker
+endif
+	node packages/dev-infra/make-scripts/run-test-shards.js
 
 .PHONY: run-dev-env
 run-dev-env: ## Run a "development environment" shell
@@ -46,8 +58,6 @@ fmt-lexicons: ## Run syntax re-formatting, just on .json files
 deps: ## Installs dependent libs using 'pnpm install'
 	pnpm install --frozen-lockfile
 
-.PHONY: nvm-setup
-nvm-setup: ## Use NVM to install and activate node+pnpm
-	nvm install 18
-	nvm use 18
-	corepack enable
+.PHONY: all
+all: ## Alias for 'make deps && make build && make test'
+	make deps && make build && make test

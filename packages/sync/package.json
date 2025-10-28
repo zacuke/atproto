@@ -22,7 +22,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc --build tsconfig.build.json",
-    "test": "../dev-infra/with-test-redis-and-db.sh jest"
+    "test": "../dev-infra/with-test-redis-and-db.sh cross-env NODE_OPTIONS=\"--trace-warnings\" jest"
   },
   "dependencies": {
     "@atproto/common": "workspace:^",
@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@types/ws": "^8.5.4",
-    "jest": "^28.1.2",
+    "jest": "^30.2.0",
     "typescript": "^5.6.3"
   }
 }

@@ -15,7 +15,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "jest",
+    "test": "cross-env NODE_OPTIONS=\"--trace-warnings\" jest",
     "build": "tsc --build tsconfig.build.json"
   },
   "dependencies": {
@@ -25,7 +25,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "jest": "^28.1.2",
+    "jest": "^30.2.0",
     "typescript": "^5.6.3"
   }
 }

@@ -18,52 +18,79 @@ describe('datetime validation', () => {
     expect(() => ensureValidDatetime(h)).toThrow(InvalidDatetimeError)
   }
 
-  it('conforms to interop valid datetimes', () => {
-    const lineReader = readline.createInterface({
-      input: fs.createReadStream(
-        `${__dirname}/interop-files/datetime_syntax_valid.txt`,
-      ),
-      terminal: false,
+  it('conforms to interop valid datetimes', async () => {
+    const lines: string[] = []
+    await new Promise<void>((resolve, reject) => {
+      const lineReader = readline.createInterface({
+        input: fs.createReadStream(
+          `${__dirname}/interop-files/datetime_syntax_valid.txt`,
+        ),
+        terminal: false,
+      })
+      lineReader.on('line', (line) => {
+        if (line.startsWith('#') || line.length === 0) {
+          return
+        }
+        lines.push(line)
+      })
+      lineReader.on('close', resolve)
+      lineReader.on('error', reject)
     })
-    lineReader.on('line', (line) => {
-      if (line.startsWith('#') || line.length === 0) {
-        return
-      }
+
+    for (const line of lines) {
       if (!isValidDatetime(line)) {
         console.log(line)
       }
       expectValid(line)
-    })
+    }
   })
 
-  it('conforms to interop invalid datetimes', () => {
-    const lineReader = readline.createInterface({
-      input: fs.createReadStream(
-        `${__dirname}/interop-files/datetime_syntax_invalid.txt`,
-      ),
-      terminal: false,
+  it('conforms to interop invalid datetimes', async () => {
+    const lines: string[] = []
+    await new Promise<void>((resolve, reject) => {
+      const lineReader = readline.createInterface({
+        input: fs.createReadStream(
+          `${__dirname}/interop-files/datetime_syntax_invalid.txt`,
+        ),
+        terminal: false,
+      })
+      lineReader.on('line', (line) => {
+        if (line.startsWith('#') || line.length === 0) {
+          return
+        }
+        lines.push(line)
+      })
+      lineReader.on('close', resolve)
+      lineReader.on('error', reject)
     })
-    lineReader.on('line', (line) => {
-      if (line.startsWith('#') || line.length === 0) {
-        return
-      }
+
+    for (const line of lines) {
       expectInvalid(line)
-    })
+    }
   })
 
-  it('conforms to interop invalid parse (semantics) datetimes', () => {
-    const lineReader = readline.createInterface({
-      input: fs.createReadStream(
-        `${__dirname}/interop-files/datetime_parse_invalid.txt`,
-      ),
-      terminal: false,
+  it('conforms to interop invalid parse (semantics) datetimes', async () => {
+    const lines: string[] = []
+    await new Promise<void>((resolve, reject) => {
+      const lineReader = readline.createInterface({
+        input: fs.createReadStream(
+          `${__dirname}/interop-files/datetime_parse_invalid.txt`,
+        ),
+        terminal: false,
+      })
+      lineReader.on('line', (line) => {
+        if (line.startsWith('#') || line.length === 0) {
+          return
+        }
+        lines.push(line)
+      })
+      lineReader.on('close', resolve)
+      lineReader.on('error', reject)
     })
-    lineReader.on('line', (line) => {
-      if (line.startsWith('#') || line.length === 0) {
-        return
-      }
+
+    for (const line of lines) {
       expectInvalid(line)
-    })
+    }
   })
 })
 

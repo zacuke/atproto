@@ -1,3 +1,13 @@
+/*
+
+// this and the @atproto/oauth-client-browser-example
+// are causing huge dependency tree (out of date and duplicates)
+// plus puppeteer is only used here
+
+// so i'm not saying get rid of it,
+// but it's home needs re-evaluated
+
+
 import assert from 'node:assert'
 import { once } from 'node:events'
 import {
@@ -341,3 +351,4 @@ function clientHandler(
       .end('Page not found')
   }
 }
+*/

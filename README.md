@@ -41,8 +41,10 @@ We recommend [`nvm`](https://github.com/nvm-sh/nvm) for managing Node.js install
 There is a Makefile which can help with basic development tasks:
 
 ```shell
-# use existing nvm to install node 18 and pnpm
-make nvm-setup
+# use existing nvm to install node and pnpm
+nvm install
+nvm use
+corepack enable
 
 # pull dependencies and build all local packages
 make deps

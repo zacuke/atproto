@@ -100,6 +100,8 @@ main_native() {
     exit $?
   }
 
+  cleanup ${services}
+
   # Run the arguments as a command
   DB_POSTGRES_URL="${postgres_url}" \
   REDIS_HOST="${redis_host}" \

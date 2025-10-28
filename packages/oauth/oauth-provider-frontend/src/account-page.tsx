@@ -24,7 +24,7 @@ declare module '@tanstack/react-router' {
     router: typeof router
   }
 }
-
+// ts-ignore
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <I18nProvider i18n={i18n}>

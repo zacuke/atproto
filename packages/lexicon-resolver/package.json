@@ -9,7 +9,7 @@
     "lexicon"
   ],
   "scripts": {
-    "test": "jest",
+    "test": "cross-env NODE_OPTIONS=\"--trace-warnings\" jest",
     "build": "tsc --build tsconfig.build.json",
     "codegen": "lex gen-api --yes ./src/client ../../lexicons/com/atproto/sync/getRecord.json"
   },
@@ -39,7 +39,7 @@
   "devDependencies": {
     "@atproto/common": "workspace:^",
     "@atproto/lex-cli": "workspace:^",
-    "jest": "^28.1.2",
+    "jest": "^30.2.0",
     "typescript": "^5.6.3"
   }
 }

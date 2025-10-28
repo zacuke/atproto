@@ -19,7 +19,7 @@
   "scripts": {
     "codegen": "node ./scripts/generate-code.mjs && lex gen-api --yes ./src/client ../../lexicons/com/atproto/*/* ../../lexicons/app/bsky/*/* ../../lexicons/chat/bsky/*/* ../../lexicons/tools/ozone/*/*",
     "build": "tsc --build tsconfig.build.json",
-    "test": "jest"
+    "test": "cross-env NODE_OPTIONS=\"--trace-warnings\" jest"
   },
   "dependencies": {
     "@atproto/common-web": "workspace:^",
@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@atproto/lex-cli": "workspace:^",
-    "jest": "^28.1.2",
+    "jest": "^30.2.0",
     "prettier": "^3.2.5",
     "typescript": "^5.6.3"
   }

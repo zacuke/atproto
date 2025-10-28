@@ -116,6 +116,7 @@ export class PDS {
               ) {
                 return true
               }
+              // @ts-ignore
               if (bypassIps && bypassIps.includes(req.ip)) {
                 return true
               }

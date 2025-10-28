@@ -1,3 +1,4 @@
+// @ts-ignore
 import './style.css'
 
 import { StrictMode } from 'react'
@@ -29,7 +30,6 @@ if (
 }
 
 const container = document.getElementById('root')!
-
 createRoot(container).render(
   <StrictMode>
     <LocaleProvider userLocales={authorizeData.uiLocales?.split(' ')}>
